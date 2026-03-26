@@ -15,6 +15,23 @@ const repeatBtn = $(".btn-repeat");
 const volumnBtn = $(".volumn-wrapper");
 const rangeVolumn = $(".range");
 
+const currentTimeEl = document.getElementById('current-time');
+const durationEl = document.getElementById('duration');
+
+function formatTime(time) {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}
+
+audio.addEventListener('loadedmetadata', () => {
+  durationEl.textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener('timeupdate', () => {
+  currentTimeEl.textContent = formatTime(audio.currentTime);
+});
+
 const app = {
   currentIndex: 0,
   volumeValue: 0,
