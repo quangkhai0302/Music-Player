@@ -175,7 +175,6 @@ const app = {
   loadCurrentSong: function () {
     const headerH2 = $("header h2");
     const audio = $("#audio");
-    console.log(this.currentSong);
     headerH2.innerText = this.currentSong.name;
     cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
     audio.src = this.currentSong.path;
