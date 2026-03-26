@@ -175,6 +175,7 @@ const app = {
   loadCurrentSong: function () {
     const headerH2 = $("header h2");
     const audio = $("#audio");
+    console.log(this.currentSong);
     headerH2.innerText = this.currentSong.name;
     cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
     audio.src = this.currentSong.path;
@@ -228,7 +229,7 @@ const app = {
     };
 
     // Hàm xử lý khi tua bài hát
-    progress.oninput = function (e) {
+    progress.onchange = function (e) {
       const value = e.target.value;
       _this.setConfig("progressValue", value);
       const currentTime = (value / 100) * audio.duration; // (audio.duration/100)* value
@@ -247,22 +248,21 @@ const app = {
 
     // Hàm xử lý khi chỉnh âm lượng
     function changeVolumn() {
-      const currentValue = rangeVolumn.value / 100;
-
-      if (currentValue === 0) {
+      _this.volumeValue = rangeVolumn.value;
+      _this.setConfig("volume", _this.volumeValue);
+      const currentValue = (rangeVolumn.value / 100).toFixed(1);
+      if (currentValue == 0.0 || _this.isClickedActive) {
         volumnBtn.classList.add("active");
-        isMutedByClick = true;
         _this.isMuted = true;
         audio.muted = true;
+        _this.setConfig("isMuted", _this.isMuted);
       } else {
         volumnBtn.classList.remove("active");
         _this.isMuted = false;
         audio.muted = false;
+        _this.setConfig("isMuted", _this.isMuted);
       }
-
       audio.volume = currentValue;
-      _this.setConfig("volume", rangeVolumn.value);
-      _this.setConfig("isMuted", app.isMuted);
     }
 
     // Hàm xử lý khi ấn next bài hát
@@ -325,13 +325,11 @@ const app = {
     volumnBtn.onclick = function () {
       this.classList.toggle("active");
       if (this.classList.contains("active")) {
-        rangeVolumn.value = 0;
         _this.isClickedActive = true;
         _this.isMuted = true;
         audio.muted = true;
         _this.setConfig("isMuted", true);
       } else {
-        rangeVolumn.value = _this.volumeValue;
         _this.isClickedActive = false;
         _this.isMuted = false;
         audio.muted = false;
